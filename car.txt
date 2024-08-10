@@ -1,0 +1,2 @@
+MobilA,Sedan,2018,200000,1
+MobilB,SUV,2020,400000,1
