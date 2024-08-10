@@ -40,7 +40,7 @@ int main()
             rental.addNewCar();
             break;
         case 2:
-            rental.addNewTransaction();
+            rental.addTransaction();
             break;
         case 3:
             rental.printCarList(true);
