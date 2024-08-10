@@ -137,7 +137,7 @@ public:
 
     void addTransaction()
     {
-        string customerName, carName;
+        string customerName, carName, confirmation;
         int rentDuration;
         Car *carRented;
         bool carAvailable = false;
@@ -156,8 +156,8 @@ public:
                     if (car->isAvailable())
                     {
                         carAvailable = true;
+                        carRented = car;
                     }
-                    break;
                 }
             }
             if (!carAvailable || !carValid)
@@ -169,7 +169,7 @@ public:
             cout << "Enter your name: ";
             cin >> customerName;
 
-            cout << "Enter duration: ";
+            cout << "Enter duration (in days): ";
             if (cin >> rentDuration)
             {
                 // Check if inputs are valid
@@ -190,9 +190,19 @@ public:
                 cout << "Invalid input. Please enter a valid number.\n";
             }
         }
+        cout << "Are you sure you want to rent " << carName << " for " << rentDuration << " days? (y/n): ";
+        cin >> confirmation;
 
-        Transaction transaction(customerName, carRented, rentDuration);
-        transactionList.push_back(transaction);
+        if (confirmation == "y")
+        {
+            cout << "Total amount to pay: " << carRented->getRentPrice(rentDuration) << "\n";
+            Transaction transaction(customerName, carRented, rentDuration);
+            transactionList.push_back(transaction);
+        }
+        else
+        {
+            cout << "Transaction canceled.\n";
+        }
     }
 
     void printTransactionList() const
@@ -274,10 +284,12 @@ public:
 
     void findCar(string carName) const
     {
+        bool found = false;
         for (const Car *car : carList)
         {
             if (car->getName() == carName)
             {
+                found = true;
                 cout << "Name Car: " << car->getName() << "\n"
                      << "Type: " << car->getType() << "\n"
                      << "Year: " << car->getYear() << "\n"
@@ -285,6 +297,10 @@ public:
                      << "Status: " << (car->isAvailable() ? "Available" : "Unavailable") << "\n"
                      << "--------------------------\n";
             }
+        }
+        if (!found)
+        {
+            cout << "Car not found.\n";
         }
     }
 

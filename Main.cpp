@@ -62,6 +62,10 @@ int main()
         case 8:
             rental.printCarList(false);
             break;
+        case 9:
+            rental.writeCarData();
+            cout << "Exiting program..." << endl;
+            break;
         default:
             cout << "Invalid choice, please try again." << endl;
         }
