@@ -39,9 +39,9 @@ public:
 
     void addNewCar()
     {
-        string name = "tst", type = "SUV";
-        int year = 2020;
-        double pricePerDay = 90000;
+        string name, type;
+        int year;
+        double pricePerDay;
         bool typeValid = false;
 
         // Loop until valid inputs are provided
@@ -135,12 +135,28 @@ public:
         carList.push_back(car);
     }
 
-    void addTransaction()
+    void insertTransaction(string customerName, string carName, int rentDuration)
+    {
+        Car *carRented;
+        for (Car *car : carList)
+        {
+            if (car->getName() == carName && car->isAvailable())
+            {
+                carRented = car;
+                break;
+            }
+        }
+        Transaction transaction(customerName, carRented, rentDuration);
+        transactionList.push_back(transaction);
+    }
+
+    void addNewTransaction()
     {
         string customerName, carName;
         int rentDuration;
         Car *carRented;
         bool carAvailable = false;
+        bool carValid = false;
 
         while (true)
         {
@@ -149,17 +165,17 @@ public:
 
             for (Car *car : carList)
             {
-                cout << "carName : " << car->getName() << endl;
-                cout << "car find: " << carName << endl;
-                cout << "isAvailable : " << car->isAvailable() << endl;
-                if (car->getName() == carName && car->isAvailable())
+                if (car->getName() == carName)
                 {
-                    carRented = car;
-                    carAvailable = true;
+                    carValid = true;
+                    if (car->isAvailable())
+                    {
+                        carAvailable = true;
+                    }
                     break;
                 }
             }
-            if (!carAvailable)
+            if (!carAvailable || !carValid)
             {
                 cout << "Car is not available.\n";
                 return;
@@ -190,8 +206,68 @@ public:
             }
         }
 
-        Transaction transaction(customerName, carRented, rentDuration);
-        transactionList.push_back(transaction);
+        insertTransaction(customerName, carName, rentDuration);
+    }
+
+    void readTransactionData()
+    {
+        ifstream file("transaction.txt");
+        if (!file)
+        {
+            cerr << "File transaction.txt can't be opened!\n";
+            return;
+        }
+
+        string line;
+        if (file.is_open())
+        {
+            while (getline(file, line))
+            {
+                if (line.empty())
+                    continue; // Skip empty lines
+
+                std::stringstream ss(line);
+                string name, carName;
+                int rentDuration;
+
+                // Assuming the fields are separated by commas
+                std::string field;
+                int fieldCount = 0;
+                while (std::getline(ss, field, ','))
+                {
+                    if (fieldCount == 0)
+                        name = field;
+                    else if (fieldCount == 1)
+                        carName = string(field);
+                    else if (fieldCount == 2)
+                        rentDuration = std::stoi(field);
+                    fieldCount++;
+                }
+                insertTransaction(name, carName, rentDuration);
+            }
+            file.close();
+        }
+    }
+
+    void writeTransactionData() const
+    {
+        ofstream file("transaction.txt");
+        if (!file)
+        {
+            cerr << "File transaction.txt can't be opened!\n";
+            return;
+        }
+
+        if (file.is_open())
+        {
+            for (int i = 0; i < transactionList.size(); i++)
+            {
+                file << transactionList[i].getCustomerName() << "," << transactionList[i].getCarName() << "," << transactionList[i].getDuration() << "\n";
+            }
+            file.close();
+        }
+        else
+            cout << "File opening is fail.";
     }
 
     void printTransactionList() const
@@ -291,23 +367,26 @@ public:
     {
         sort(carList.begin(), carList.end(), [](Car *a, Car *b)
              { return a->getName() < b->getName(); });
+        printCarList(true);
     }
 
     void sortCarByYear()
     {
         sort(carList.begin(), carList.end(), [](Car *a, Car *b)
-             {
-                 return b->getYear() < a->getYear(); // Descending
-             });
+             { return b->getYear() < a->getYear(); });
+        printCarList(true);
     }
 
-    void printCarList() const
+    void printCarList(bool showAvailable) const
     {
         cout << '|' << setw(10) << "Car Name" << '|' << setw(10) << "Type" << '|' << setw(10) << "Year" << '|' << setw(20) << "Rent Price" << "|" << setw(15) << "Status" << '|' << endl;
         cout << "-----------------------------------------------------------------------" << endl;
         for (const Car *car : carList)
         {
-            cout << '|' << setw(10) << car->getName() << '|' << setw(10) << car->getType() << '|' << setw(10) << car->getYear() << '|' << setw(20) << car->getPricePerDay() << "|" << setw(15) << (car->isAvailable() ? "Available" : "Unavailable") << '|' << endl;
+            if (car->isAvailable() || !showAvailable)
+            {
+                cout << '|' << setw(10) << car->getName() << '|' << setw(10) << car->getType() << '|' << setw(10) << car->getYear() << '|' << setw(20) << car->getPricePerDay() << "|" << setw(15) << (car->isAvailable() ? "Available" : "Unavailable") << '|' << endl;
+            }
         }
     }
 };
