@@ -72,7 +72,7 @@ public:
 
     double getRentPrice(int durasi) const override
     {
-        return pricePerDay * durasi * 1.05; // Misal ada surcharge 5%
+        return pricePerDay * durasi * 1.05;
     }
 
     string getType() const override

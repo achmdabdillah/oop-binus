@@ -119,7 +119,6 @@ public:
     {
         Car *car;
 
-        // TODO create factory method
         if (type == "Sedan")
         {
             car = new Sedan(name, year, pricePerDay, available);

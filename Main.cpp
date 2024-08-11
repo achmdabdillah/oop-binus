@@ -65,8 +65,7 @@ int main()
         default:
             cout << "Invalid choice, please try again." << endl;
         }
-
-        cout << endl; // Add a blank line for better readability
+        cout << endl;
     } while (choice != 9);
 
     return 0;
