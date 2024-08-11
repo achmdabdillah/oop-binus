@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "iomanip": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "istream": "cpp",
+        "fstream": "cpp",
+        "limits": "cpp",
+        "iostream": "cpp",
+        "bitset": "cpp"
     }
 }
