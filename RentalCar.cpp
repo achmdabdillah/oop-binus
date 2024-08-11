@@ -134,6 +134,10 @@ public:
         {
             cout << "Enter car that you want to rent: ";
             cin >> carName;
+            for (int i = 0; i < carName.length(); i++)
+            {
+                carName[i] = tolower(carName[i]);
+            }
 
             for (Car *car : carList)
             {
@@ -147,7 +151,14 @@ public:
                     }
                 }
             }
-            if (!carAvailable || !carValid)
+
+            if (!carValid)
+            {
+                cout << "Car not found.\n";
+                return;
+            }
+
+            if (!carAvailable)
             {
                 cout << "Car is not available.\n";
                 return;
