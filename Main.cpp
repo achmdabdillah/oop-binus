@@ -3,10 +3,6 @@
 
 using namespace std;
 
-// TODO save transaction on txt files
-// TODO create y/n option to payment
-// TODO revamp struct
-
 void showMenu()
 {
     cout << "======= CLI Menu =======" << endl;

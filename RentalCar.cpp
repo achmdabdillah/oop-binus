@@ -10,18 +10,18 @@
 
 using namespace std;
 
-// string formatRupiah(int num)
-// {
-//     string delimiter = ".";
-//     string output = to_string(num);
-//     int inspost = output.length() - 3;
-//     while (inspost > 0)
-//     {
-//         output.insert(inspost, delimiter);
-//         inspost -= 3;
-//     }
-//     return "Rp." + output + ",00";
-// }
+static string formatRupiah(int num)
+{
+    string delimiter = ".";
+    string output = to_string(num);
+    int inspost = output.length() - 3;
+    while (inspost > 0)
+    {
+        output.insert(inspost, delimiter);
+        inspost -= 3;
+    }
+    return "Rp." + output + ",00";
+}
 
 class RentalCar
 {
@@ -195,7 +195,7 @@ public:
 
         if (confirmation == "y")
         {
-            cout << "Total amount to pay: " << carRented->getRentPrice(rentDuration) << "\n";
+            cout << "Total amount to pay: " << formatRupiah(carRented->getRentPrice(rentDuration)) << "\n";
             Transaction transaction(customerName, carRented, rentDuration);
             transactionList.push_back(transaction);
         }
@@ -326,7 +326,7 @@ public:
         {
             if (car->isAvailable() || !showAvailable)
             {
-                cout << '|' << setw(10) << car->getName() << '|' << setw(10) << car->getType() << '|' << setw(10) << car->getYear() << '|' << setw(20) << car->getPricePerDay() << "|" << setw(15) << (car->isAvailable() ? "Available" : "Unavailable") << '|' << endl;
+                cout << '|' << setw(10) << car->getName() << '|' << setw(10) << car->getType() << '|' << setw(10) << car->getYear() << '|' << setw(20) << formatRupiah(car->getPricePerDay()) << "|" << setw(15) << (car->isAvailable() ? "Available" : "Unavailable") << '|' << endl;
             }
         }
     }
